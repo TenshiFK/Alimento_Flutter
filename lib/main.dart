@@ -15,6 +15,7 @@ class MyApp extends StatelessWidget {
       title: 'CRUD Mercado',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        useMaterial3: true,
       ),
       home: const MyHomePage(),
     );
@@ -80,19 +81,27 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           actions: [
             TextButton(
+              style: TextButton.styleFrom(
+                  foregroundColor: const Color.fromARGB(255, 148, 85, 61)),
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('Cancelar'),
+              child: const Text(
+                'Cancelar',
+                style: TextStyle(color: Color.fromARGB(255, 105, 64, 49)),
+              ),
             ),
             TextButton(
+              style: TextButton.styleFrom(
+                  foregroundColor: const Color.fromARGB(255, 148, 85, 61)),
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
                   _addAlimento();
                   Navigator.of(context).pop();
                 }
               },
-              child: const Text('Adicionar'),
+              child: const Text('Adicionar',
+                  style: TextStyle(color: Color.fromARGB(255, 105, 64, 49))),
             ),
           ],
         );
@@ -167,19 +176,25 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           actions: [
             TextButton(
+              style: TextButton.styleFrom(
+                  foregroundColor: const Color.fromARGB(255, 148, 85, 61)),
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('Cancelar'),
+              child: const Text('Cancelar',
+                  style: TextStyle(color: Color.fromARGB(255, 105, 64, 49))),
             ),
             TextButton(
+              style: TextButton.styleFrom(
+                  foregroundColor: const Color.fromARGB(255, 148, 85, 61)),
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
                   _updateAlimento(alimento);
                   Navigator.of(context).pop();
                 }
               },
-              child: const Text('Atualizar'),
+              child: const Text('Atualizar',
+                  style: TextStyle(color: Color.fromARGB(255, 105, 64, 49))),
             ),
           ],
         );
@@ -229,37 +244,67 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final seedColor = Colors.orange;
+
+    final themeData = Theme.of(context).copyWith(
+      colorScheme: ColorScheme.fromSeed(seedColor: seedColor),
+    );
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('CRUD Mercado'),
-      ),
+          title: const Text(
+            'Minhas Compras',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 26,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          centerTitle: true,
+          backgroundColor: themeData.colorScheme.primary),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : ListView.builder(
               itemCount: _alimentos.length,
               itemBuilder: (context, index) {
                 final alimento = _alimentos[index];
-                return ListTile(
-                  title: Text(alimento.nome),
-                  subtitle:
-                      Text('Preço: R\$${alimento.preco.toStringAsFixed(2)}'),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.edit),
-                        onPressed: () => _showUpdateAlimentoDialog(alimento),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.delete),
-                        onPressed: () => _deleteAlimento(alimento.id!),
-                      ),
-                    ],
+                return Card(
+                  child: ListTile(
+                    title: Text(alimento.nome,
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20)),
+                    subtitle: Text(
+                      'Preço: R\$${alimento.preco.toStringAsFixed(2)}',
+                      style: TextStyle(color: Colors.white, fontSize: 16),
+                    ),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: const Icon(
+                            Icons.edit,
+                            color: Colors.white,
+                          ),
+                          onPressed: () => _showUpdateAlimentoDialog(alimento),
+                        ),
+                        IconButton(
+                          icon: const Icon(
+                            Icons.delete,
+                            color: Colors.white,
+                          ),
+                          onPressed: () => _deleteAlimento(alimento.id!),
+                        ),
+                      ],
+                    ),
                   ),
+                  color: themeData.colorScheme.inversePrimary,
                 );
               },
             ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: themeData.colorScheme.primaryContainer,
         onPressed: _showAddAlimentoDialog,
         tooltip: 'Adicionar Alimento',
         child: const Icon(Icons.add),
